@@ -31,6 +31,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mewna.catnip.Catnip;
 import com.mewna.catnip.entity.Entity;
 import com.mewna.catnip.entity.Snowflake;
+import com.mewna.catnip.entity.channel.Webhook;
 import com.mewna.catnip.entity.impl.AuditLogEntryImpl;
 import com.mewna.catnip.entity.user.User;
 import io.vertx.core.json.JsonObject;
@@ -39,6 +40,7 @@ import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author SamOphis
@@ -81,6 +83,16 @@ public interface AuditLogEntry extends Snowflake {
     List<AuditLogChange> changes();
     
     static AuditLogEntry fromJson(final Catnip catnip, final JsonObject json) {
-        return Entity.fromJson(catnip, AuditLogEntry.class, json);
+        return AuditLogEntryImpl
+                .builder()
+                .catnip(catnip)
+                .changes(json.getJsonArray("changes").stream().map(obj -> AuditLogChange.fromJson(catnip, json)).collect(Collectors.toList()))
+                .idAsLong(json.getLong("idAsLong"))
+                .options(OptionalEntryInfo.fromJson(catnip, json.getJsonObject("options")))
+                .reason(json.getString("reason"))
+                .targetIdAsLong(json.getLong("targetIdAsLong"))
+                .type(ActionType.byKey(json.getInteger("type")))
+                .webhook(Webhook.fromJson(catnip, json.getJsonObject("webhook")))
+                .build();
     }
 }

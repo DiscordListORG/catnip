@@ -27,6 +27,9 @@
 
 package com.mewna.catnip.entity.channel;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.mewna.catnip.entity.impl.CategoryImpl;
+
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 
@@ -36,6 +39,7 @@ import javax.annotation.Nonnull;
  * @author natanbc
  * @since 9/12/18
  */
+@JsonDeserialize(as = CategoryImpl.class)
 public interface Category extends GuildChannel {
     @Nonnull
     @Override

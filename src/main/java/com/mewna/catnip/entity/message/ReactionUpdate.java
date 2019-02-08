@@ -27,6 +27,7 @@
 
 package com.mewna.catnip.entity.message;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mewna.catnip.Catnip;
 import com.mewna.catnip.entity.Entity;
@@ -73,9 +74,24 @@ public interface ReactionUpdate extends Entity {
      * @return The emoji from the updated reaction.
      */
     @Nonnull
+    @JsonIgnore
     Emoji emoji();
     
+    @Nonnull
+    @Override
+    default JsonObject toJson() {
+        return Entity.super.toJson().put("emoji", emoji().toJson());
+    }
+    
     static ReactionUpdate fromJson(final Catnip catnip, final JsonObject json) {
-        return Entity.fromJson(catnip, ReactionUpdate.class, json);
+        return ReactionUpdateImpl
+                .builder()
+                .catnip(catnip)
+                .channelId(json.getString("channelId"))
+                .emoji(Emoji.fromJson(catnip, json.getJsonObject("emoji")))
+                .guildId(json.getString("guildId"))
+                .messageId(json.getString("messageId"))
+                .userId(json.getString("userId"))
+                .build();
     }
 }
