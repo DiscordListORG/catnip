@@ -33,7 +33,6 @@ import com.mewna.catnip.Catnip;
 import com.mewna.catnip.entity.RequiresCatnip;
 import com.mewna.catnip.entity.channel.Category;
 import com.mewna.catnip.entity.guild.PermissionOverride;
-import io.vertx.core.json.JsonObject;
 import lombok.*;
 import lombok.experimental.Accessors;
 

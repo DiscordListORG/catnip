@@ -50,7 +50,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ApplicationInfoImpl implements ApplicationInfo, RequiresCatnip {
-    
     @JsonIgnore
     private transient Catnip catnip;
     
