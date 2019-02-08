@@ -28,9 +28,13 @@
 package com.mewna.catnip.entity.channel;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mewna.catnip.Catnip;
+import com.mewna.catnip.entity.Entity;
+import com.mewna.catnip.entity.RequiresCatnip;
 import com.mewna.catnip.entity.Snowflake;
 import com.mewna.catnip.entity.util.Permission;
 import com.mewna.catnip.util.PermissionUtil;
+import io.vertx.core.json.JsonObject;
 import lombok.Getter;
 
 import javax.annotation.CheckReturnValue;
@@ -267,6 +271,38 @@ public interface Channel extends Snowflake {
                 }
             }
             throw new IllegalArgumentException("No channel type for key " + key);
+        }
+    }
+    
+    /**
+     * Override of {@link Entity#toJson()} to include the channel type.
+     *
+     * @see Entity#toJson()
+     * @return  A JSON object representing this channel.
+     */
+    @Nonnull
+    @Override
+    default JsonObject toJson() {
+        return Snowflake.super.toJson().put("type", type());
+    }
+    
+    static Channel fromJson(final Catnip catnip, final JsonObject json) {
+        final ChannelType type = ChannelType.valueOf(json.getString("type"));
+        // Remove type because implementation don't include a type field
+        json.remove("type");
+        switch(type) {
+            case CATEGORY:
+                return Entity.fromJson(catnip, Category.class, json);
+            case VOICE:
+                return Entity.fromJson(catnip, VoiceChannel.class, json);
+            case TEXT:
+                return Entity.fromJson(catnip, TextChannel.class, json);
+            case GROUP_DM:
+                return Entity.fromJson(catnip, GroupDMChannel.class, json);
+            case DM:
+                return Entity.fromJson(catnip, UserDMChannel.class, json);
+            default:
+                throw new IllegalArgumentException("This json object does not contain a valid channel");
         }
     }
 }
