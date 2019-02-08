@@ -27,9 +27,15 @@
 
 package com.mewna.catnip.entity.misc;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.mewna.catnip.Catnip;
+import com.mewna.catnip.entity.Entity;
 import com.mewna.catnip.entity.Snowflake;
 import com.mewna.catnip.entity.guild.Guild;
+import com.mewna.catnip.entity.impl.CustomEmojiImpl;
+import com.mewna.catnip.entity.impl.UnicodeEmojiImpl;
 import com.mewna.catnip.entity.user.User;
+import io.vertx.core.json.JsonObject;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -167,7 +173,32 @@ public interface Emoji extends Snowflake {
     @CheckReturnValue
     boolean is(@Nonnull String emoji);
     
+    String emojiType();
+    
+    @Nonnull
+    @Override
+    default JsonObject toJson() {
+        return Snowflake.super.toJson().put("type", emojiType());
+    }
+    
+    static Emoji fromJson(final Catnip catnip, final JsonObject json) {
+        final String type = json.getString("type");
+        json.remove("type");
+        switch(type) {
+            case CustomEmoji.IDENTIFIER:
+                return Entity.fromJson(catnip, CustomEmoji.class, json);
+            case UnicodeEmoji.IDENTIFIER:
+                return Entity.fromJson(catnip, UnicodeEmoji.class, json);
+            default:
+                throw new IllegalArgumentException("This json does not contain a valid emoji");
+        }
+    }
+    
+    @JsonDeserialize(as = CustomEmojiImpl.class)
     interface CustomEmoji extends Emoji {
+        
+        String IDENTIFIER = "custom_emoji";
+        
         @Override
         @Nonnull
         @CheckReturnValue
@@ -247,9 +278,18 @@ public interface Emoji extends Snowflake {
         default boolean is(@Nonnull final String emoji) {
             return id().equals(emoji) || forMessage().equals(emoji) || forReaction().equals(emoji);
         }
+    
+        @Override
+        default String emojiType() {
+            return IDENTIFIER;
+        }
     }
     
+    @JsonDeserialize(as = UnicodeEmojiImpl.class)
     interface UnicodeEmoji extends Emoji {
+        
+        String IDENTIFIER = "unicode_emoiji";
+        
         @Override
         default String id() {
             throw new IllegalStateException("Unicode emojis have no IDs!");
@@ -310,6 +350,11 @@ public interface Emoji extends Snowflake {
         @CheckReturnValue
         default boolean is(@Nonnull final String emoji) {
             return name().equals(emoji);
+        }
+    
+        @Override
+        default String emojiType() {
+            return IDENTIFIER;
         }
     }
 }
