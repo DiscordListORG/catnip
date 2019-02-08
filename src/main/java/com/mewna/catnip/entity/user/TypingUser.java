@@ -27,7 +27,12 @@
 
 package com.mewna.catnip.entity.user;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.mewna.catnip.Catnip;
+import com.mewna.catnip.entity.Entity;
 import com.mewna.catnip.entity.Snowflake;
+import com.mewna.catnip.entity.impl.TypingUserImpl;
+import io.vertx.core.json.JsonObject;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnegative;
@@ -40,6 +45,7 @@ import javax.annotation.Nullable;
  * @author amy
  * @since 10/6/18.
  */
+@JsonDeserialize(as = TypingUserImpl.class)
 public interface TypingUser extends Snowflake {
     /**
      * @return The id of the channel being typed in.
@@ -82,4 +88,8 @@ public interface TypingUser extends Snowflake {
     @Nonnegative
     @CheckReturnValue
     long timestamp();
+    
+    static TypingUser fromJson(final Catnip catnip, final JsonObject json) {
+        return Entity.fromJson(catnip, TypingUser.class, json);
+    }
 }

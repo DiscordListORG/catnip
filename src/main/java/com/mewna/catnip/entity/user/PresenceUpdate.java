@@ -28,9 +28,12 @@
 package com.mewna.catnip.entity.user;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.mewna.catnip.Catnip;
+import com.mewna.catnip.entity.Entity;
 import com.mewna.catnip.entity.Snowflake;
 import com.mewna.catnip.entity.guild.GuildEntity;
 import com.mewna.catnip.entity.impl.PresenceUpdateImpl;
+import io.vertx.core.json.JsonObject;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -71,4 +74,8 @@ public interface PresenceUpdate extends Presence, GuildEntity, Snowflake {
      */
     @Nullable
     OnlineStatus desktopStatus();
+    
+    static PresenceUpdate fromJson(final Catnip catnip, final JsonObject json) {
+        return Entity.fromJson(catnip, PresenceUpdate.class, json);
+    }
 }

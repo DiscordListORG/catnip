@@ -28,8 +28,10 @@
 package com.mewna.catnip.entity.misc;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.mewna.catnip.Catnip;
 import com.mewna.catnip.entity.Entity;
 import com.mewna.catnip.entity.impl.GatewayInfoImpl;
+import io.vertx.core.json.JsonObject;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -56,4 +58,8 @@ public interface GatewayInfo extends Entity {
     
     @Nonnegative
     long resetAfter();
+    
+    static GatewayInfo fromJson(final Catnip catnip, final JsonObject json) {
+        return Entity.fromJson(catnip, GatewayInfo.class, json);
+    }
 }

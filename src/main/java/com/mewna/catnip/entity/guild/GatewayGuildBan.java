@@ -27,7 +27,12 @@
 
 package com.mewna.catnip.entity.guild;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.mewna.catnip.Catnip;
+import com.mewna.catnip.entity.Entity;
+import com.mewna.catnip.entity.impl.GatewayGuildBanImpl;
 import com.mewna.catnip.entity.user.User;
+import io.vertx.core.json.JsonObject;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -38,6 +43,7 @@ import javax.annotation.Nonnull;
  * @author amy
  * @since 10/6/18.
  */
+@JsonDeserialize(as = GatewayGuildBanImpl.class)
 public interface GatewayGuildBan extends GuildEntity {
 
     /**
@@ -46,4 +52,8 @@ public interface GatewayGuildBan extends GuildEntity {
     @Nonnull
     @CheckReturnValue
     User user();
+    
+    static GatewayGuildBan fromJson(final Catnip catnip, final JsonObject json) {
+        return Entity.fromJson(catnip, GatewayGuildBan.class, json);
+    }
 }

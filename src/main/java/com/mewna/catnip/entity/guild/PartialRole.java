@@ -27,11 +27,20 @@
 
 package com.mewna.catnip.entity.guild;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.mewna.catnip.Catnip;
+import com.mewna.catnip.entity.Entity;
 import com.mewna.catnip.entity.Snowflake;
+import com.mewna.catnip.entity.impl.PartialGuildImpl;
+import io.vertx.core.json.JsonObject;
 
 /**
  * @author amy
  * @since 10/4/18.
  */
+@JsonDeserialize(as = PartialGuildImpl.class)
 public interface PartialRole extends GuildEntity, Snowflake {
+    static PartialRole fromJson(final Catnip catnip, final JsonObject json) {
+        return Entity.fromJson(catnip, PartialRole.class, json);
+    }
 }

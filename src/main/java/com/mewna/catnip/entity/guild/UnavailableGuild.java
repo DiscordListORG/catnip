@@ -27,7 +27,12 @@
 
 package com.mewna.catnip.entity.guild;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.mewna.catnip.Catnip;
+import com.mewna.catnip.entity.Entity;
 import com.mewna.catnip.entity.Snowflake;
+import com.mewna.catnip.entity.impl.UnavailableGuildImpl;
+import io.vertx.core.json.JsonObject;
 
 import javax.annotation.CheckReturnValue;
 
@@ -37,10 +42,15 @@ import javax.annotation.CheckReturnValue;
  * @author amy
  * @since 10/4/18.
  */
+@JsonDeserialize(as = UnavailableGuildImpl.class)
 public interface UnavailableGuild extends Snowflake {
     /**
      * @return Whether the guild is unavailable.
      */
     @CheckReturnValue
     boolean unavailable();
+    
+    static UnavailableGuild fromJson(final Catnip catnip, final JsonObject json) {
+        return Entity.fromJson(catnip, UnavailableGuild.class, json);
+    }
 }

@@ -28,11 +28,13 @@
 package com.mewna.catnip.entity.user;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.mewna.catnip.Catnip;
 import com.mewna.catnip.entity.Entity;
 import com.mewna.catnip.entity.channel.VoiceChannel;
 import com.mewna.catnip.entity.guild.Guild;
 import com.mewna.catnip.entity.guild.Member;
 import com.mewna.catnip.entity.impl.VoiceStateImpl;
+import io.vertx.core.json.JsonObject;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -188,4 +190,8 @@ public interface VoiceState extends Entity {
      */
     @CheckReturnValue
     boolean suppress();
+    
+    static VoiceState fromJson(final Catnip catnip, final JsonObject json) {
+        return Entity.fromJson(catnip, VoiceState.class, json);
+    }
 }

@@ -27,7 +27,11 @@
 
 package com.mewna.catnip.entity.guild.audit;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.mewna.catnip.Catnip;
 import com.mewna.catnip.entity.Entity;
+import com.mewna.catnip.entity.impl.AuditLogChangeImpl;
+import io.vertx.core.json.JsonObject;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -38,6 +42,7 @@ import javax.annotation.Nullable;
  * @since 10/07/18
  */
 @SuppressWarnings("unused")
+@JsonDeserialize(as = AuditLogChangeImpl.class)
 public interface AuditLogChange extends Entity {
     @Nullable
     @CheckReturnValue
@@ -50,4 +55,8 @@ public interface AuditLogChange extends Entity {
     @Nonnull
     @CheckReturnValue
     String key();
+    
+    static AuditLogChange fromJson(final Catnip catnip, final JsonObject json) {
+        return Entity.fromJson(catnip, AuditLogChange.class, json);
+    }
 }

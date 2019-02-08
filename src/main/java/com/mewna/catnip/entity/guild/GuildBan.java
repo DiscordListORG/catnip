@@ -27,8 +27,12 @@
 
 package com.mewna.catnip.entity.guild;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.mewna.catnip.Catnip;
 import com.mewna.catnip.entity.Entity;
+import com.mewna.catnip.entity.impl.GuildBanImpl;
 import com.mewna.catnip.entity.user.User;
+import io.vertx.core.json.JsonObject;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -40,6 +44,7 @@ import javax.annotation.Nullable;
  * @author amy
  * @since 10/6/18.
  */
+@JsonDeserialize(as = GuildBanImpl.class)
 public interface GuildBan extends Entity {
     /**
      * @return The user who was banned.
@@ -54,4 +59,8 @@ public interface GuildBan extends Entity {
     @Nullable
     @CheckReturnValue
     String reason();
+    
+    static GuildBan fromJson(final Catnip catnip, final JsonObject json) {
+        return Entity.fromJson(catnip, GuildBan.class, json);
+    }
 }

@@ -29,6 +29,8 @@ package com.mewna.catnip.entity.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.mewna.catnip.Catnip;
+import com.mewna.catnip.entity.Entity;
 import com.mewna.catnip.entity.Mentionable;
 import com.mewna.catnip.entity.Snowflake;
 import com.mewna.catnip.entity.channel.DMChannel;
@@ -36,6 +38,7 @@ import com.mewna.catnip.entity.guild.Guild;
 import com.mewna.catnip.entity.guild.Member;
 import com.mewna.catnip.entity.impl.UserImpl;
 import com.mewna.catnip.entity.util.ImageOptions;
+import io.vertx.core.json.JsonObject;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -208,5 +211,9 @@ public interface User extends Snowflake, Mentionable {
     @CheckReturnValue
     default String asMention() {
         return "<@" + id() + '>';
+    }
+    
+    static User fromJson(final Catnip catnip, final JsonObject json) {
+        return Entity.fromJson(catnip, User.class, json);
     }
 }

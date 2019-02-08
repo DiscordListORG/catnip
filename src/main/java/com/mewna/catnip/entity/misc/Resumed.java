@@ -27,7 +27,11 @@
 
 package com.mewna.catnip.entity.misc;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.mewna.catnip.Catnip;
 import com.mewna.catnip.entity.Entity;
+import com.mewna.catnip.entity.impl.ResumedImpl;
+import io.vertx.core.json.JsonObject;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -38,10 +42,15 @@ import java.util.List;
  * @author amy
  * @since 11/10/18.
  */
+@JsonDeserialize(as = ResumedImpl.class)
 public interface Resumed extends Entity {
     /**
      * @return Debugging trace.
      */
     @Nonnull
     List<String> trace();
+    
+    static Resumed fromJson(final Catnip catnip, final JsonObject json) {
+        return Entity.fromJson(catnip, Resumed.class, json);
+    }
 }

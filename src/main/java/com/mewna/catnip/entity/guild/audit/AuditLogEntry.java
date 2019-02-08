@@ -27,8 +27,13 @@
 
 package com.mewna.catnip.entity.guild.audit;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.mewna.catnip.Catnip;
+import com.mewna.catnip.entity.Entity;
 import com.mewna.catnip.entity.Snowflake;
+import com.mewna.catnip.entity.impl.AuditLogEntryImpl;
 import com.mewna.catnip.entity.user.User;
+import io.vertx.core.json.JsonObject;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -40,6 +45,7 @@ import java.util.List;
  * @since 10/07/18
  */
 @SuppressWarnings("unused")
+@JsonDeserialize(as = AuditLogEntryImpl.class)
 public interface AuditLogEntry extends Snowflake {
     @Nullable
     @CheckReturnValue
@@ -73,4 +79,8 @@ public interface AuditLogEntry extends Snowflake {
     @Nonnull
     @CheckReturnValue
     List<AuditLogChange> changes();
+    
+    static AuditLogEntry fromJson(final Catnip catnip, final JsonObject json) {
+        return Entity.fromJson(catnip, AuditLogEntry.class, json);
+    }
 }

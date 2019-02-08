@@ -28,9 +28,14 @@
 package com.mewna.catnip.entity.guild;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.mewna.catnip.Catnip;
+import com.mewna.catnip.entity.Entity;
 import com.mewna.catnip.entity.Snowflake;
+import com.mewna.catnip.entity.impl.PartialGuildImpl;
 import com.mewna.catnip.entity.util.ImageOptions;
 import com.mewna.catnip.entity.util.Permission;
+import io.vertx.core.json.JsonObject;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -41,6 +46,7 @@ import java.util.Set;
  * @author natanbc
  * @since 10/10/18.
  */
+@JsonDeserialize(as = PartialGuildImpl.class)
 public interface PartialGuild extends Snowflake {
     @Nonnull
     @CheckReturnValue
@@ -68,4 +74,8 @@ public interface PartialGuild extends Snowflake {
     @Nonnull
     @CheckReturnValue
     Set<Permission> permissions();
+    
+    static PartialGuild fromJson(final Catnip catnip, final JsonObject json) {
+        return Entity.fromJson(catnip, PartialGuild.class, json);
+    }
 }

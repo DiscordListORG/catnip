@@ -27,8 +27,13 @@
 
 package com.mewna.catnip.entity.guild;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.mewna.catnip.Catnip;
+import com.mewna.catnip.entity.Entity;
 import com.mewna.catnip.entity.Snowflake;
+import com.mewna.catnip.entity.impl.PartialMemberImpl;
 import com.mewna.catnip.entity.user.User;
+import io.vertx.core.json.JsonObject;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -39,6 +44,7 @@ import java.util.Set;
  * @author amy
  * @since 10/4/18.
  */
+@JsonDeserialize(as = PartialMemberImpl.class)
 public interface PartialMember extends GuildEntity, Snowflake {
     @Override
     @CheckReturnValue
@@ -57,4 +63,8 @@ public interface PartialMember extends GuildEntity, Snowflake {
     @Nullable
     @CheckReturnValue
     String nick();
+    
+    static PartialMember fromJson(final Catnip catnip, final JsonObject json) {
+        return Entity.fromJson(catnip, PartialMember.class, json);
+    }
 }

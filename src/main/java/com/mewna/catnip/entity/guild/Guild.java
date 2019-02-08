@@ -29,8 +29,10 @@ package com.mewna.catnip.entity.guild;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.mewna.catnip.Catnip;
 import com.mewna.catnip.cache.view.CacheView;
 import com.mewna.catnip.cache.view.NamedCacheView;
+import com.mewna.catnip.entity.Entity;
 import com.mewna.catnip.entity.Snowflake;
 import com.mewna.catnip.entity.channel.GuildChannel;
 import com.mewna.catnip.entity.channel.Webhook;
@@ -743,6 +745,10 @@ public interface Guild extends Snowflake {
             }
             throw new IllegalArgumentException("No verification level for key " + key);
         }
+    }
+    
+    static Guild fromJson(final Catnip catnip, final JsonObject json) {
+        return Entity.fromJson(catnip, Guild.class, json);
     }
     
     @SuppressWarnings("unused")

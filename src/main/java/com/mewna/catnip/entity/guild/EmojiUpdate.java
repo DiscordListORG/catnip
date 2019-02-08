@@ -27,7 +27,12 @@
 
 package com.mewna.catnip.entity.guild;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.mewna.catnip.Catnip;
+import com.mewna.catnip.entity.Entity;
+import com.mewna.catnip.entity.impl.CustomEmojiImpl;
 import com.mewna.catnip.entity.misc.Emoji.CustomEmoji;
+import io.vertx.core.json.JsonObject;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -39,6 +44,7 @@ import java.util.List;
  * @author amy
  * @since 10/9/18.
  */
+@JsonDeserialize(as = CustomEmojiImpl.class)
 public interface EmojiUpdate extends GuildEntity {
     /**
      * @return A non-{@code null}, possibly-empty list of the guild's emojis.
@@ -46,4 +52,8 @@ public interface EmojiUpdate extends GuildEntity {
     @Nonnull
     @CheckReturnValue
     List<CustomEmoji> emojis();
+    
+    static EmojiUpdate fromJson(final Catnip catnip, final JsonObject json) {
+        return Entity.fromJson(catnip, EmojiUpdate.class, json);
+    }
 }

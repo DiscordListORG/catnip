@@ -28,8 +28,11 @@
 package com.mewna.catnip.entity.user;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.mewna.catnip.Catnip;
+import com.mewna.catnip.entity.Entity;
 import com.mewna.catnip.entity.impl.PresenceImpl;
 import com.mewna.catnip.entity.impl.PresenceImpl.ActivityImpl;
+import io.vertx.core.json.JsonObject;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
@@ -82,6 +85,10 @@ public interface Presence {
     
     @Nullable
     Activity activity();
+    
+    static Presence fromJson(final Catnip catnip, final JsonObject json) {
+        return Entity.fromJson(catnip, Presence.class, json);
+    }
     
     @Accessors(fluent = true, chain = true)
     enum OnlineStatus {

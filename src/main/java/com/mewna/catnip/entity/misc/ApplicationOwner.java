@@ -27,11 +27,21 @@
 
 package com.mewna.catnip.entity.misc;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.mewna.catnip.Catnip;
+import com.mewna.catnip.entity.Entity;
+import com.mewna.catnip.entity.impl.ApplicationOwnerImpl;
 import com.mewna.catnip.entity.user.User;
+import io.vertx.core.json.JsonObject;
 
 /**
  * This may be changed if discord changes the format for teams in the returned response.
  */
+@JsonDeserialize(as = ApplicationOwnerImpl.class)
 public interface ApplicationOwner extends User {
     boolean isTeam();
+    
+    static ApplicationOwner fromJson(final Catnip catnip, final JsonObject json) {
+        return Entity.fromJson(catnip, ApplicationOwner.class, json);
+    }
 }

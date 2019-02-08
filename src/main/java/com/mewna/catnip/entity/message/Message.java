@@ -29,6 +29,8 @@ package com.mewna.catnip.entity.message;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.mewna.catnip.Catnip;
+import com.mewna.catnip.entity.Entity;
 import com.mewna.catnip.entity.Snowflake;
 import com.mewna.catnip.entity.channel.MessageChannel;
 import com.mewna.catnip.entity.channel.TextChannel;
@@ -41,6 +43,7 @@ import com.mewna.catnip.entity.misc.Emoji;
 import com.mewna.catnip.entity.user.User;
 import com.mewna.catnip.entity.util.Permission;
 import com.mewna.catnip.util.PermissionUtil;
+import io.vertx.core.json.JsonObject;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnegative;
@@ -362,6 +365,10 @@ public interface Message extends Snowflake {
     @JsonIgnore
     default CompletionStage<Message> edit(@Nonnull final Message message) {
         return catnip().rest().channel().editMessage(channelId(), id(), message);
+    }
+    
+    static Message fromJson(final Catnip catnip, final JsonObject json) {
+        return Entity.fromJson(catnip, Message.class, json);
     }
     
     @JsonDeserialize(as = AttachmentImpl.class)

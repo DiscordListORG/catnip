@@ -27,13 +27,20 @@
 
 package com.mewna.catnip.entity.guild;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.mewna.catnip.Catnip;
 import com.mewna.catnip.entity.Entity;
 import com.mewna.catnip.entity.Snowflake;
 import com.mewna.catnip.entity.channel.Channel.ChannelType;
 import com.mewna.catnip.entity.guild.Guild.VerificationLevel;
+import com.mewna.catnip.entity.impl.InviteImpl;
+import com.mewna.catnip.entity.impl.InviteImpl.InviteChannelImpl;
+import com.mewna.catnip.entity.impl.InviteImpl.InviteGuildImpl;
+import com.mewna.catnip.entity.impl.InviteImpl.InviterImpl;
 import com.mewna.catnip.entity.util.ImageOptions;
 import com.mewna.catnip.entity.util.Permission;
 import com.mewna.catnip.util.PermissionUtil;
+import io.vertx.core.json.JsonObject;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnegative;
@@ -49,6 +56,7 @@ import java.util.concurrent.CompletionStage;
  * @since 9/14/18
  */
 @SuppressWarnings("unused")
+@JsonDeserialize(as = InviteImpl.class)
 public interface Invite extends Entity {
     /**
      * @return The code for this invite.
@@ -102,6 +110,11 @@ public interface Invite extends Entity {
         return catnip().rest().invite().deleteInvite(code());
     }
     
+    static Invite fromJson(final Catnip catnip, final JsonObject json) {
+        return Entity.fromJson(catnip, Invite.class, json);
+    }
+    
+    @JsonDeserialize(as = InviterImpl.class)
     interface Inviter extends Snowflake {
         @Nonnull
         @CheckReturnValue
@@ -139,6 +152,7 @@ public interface Invite extends Entity {
         String effectiveAvatarUrl();
     }
     
+    @JsonDeserialize(as = InviteGuildImpl.class)
     interface InviteGuild extends Snowflake {
         @Nonnull
         @CheckReturnValue
@@ -181,6 +195,7 @@ public interface Invite extends Entity {
         }
     }
     
+    @JsonDeserialize(as = InviteChannelImpl.class)
     interface InviteChannel extends Snowflake {
         @Nonnull
         @CheckReturnValue

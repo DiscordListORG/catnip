@@ -27,9 +27,13 @@
 
 package com.mewna.catnip.entity.misc;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.mewna.catnip.Catnip;
 import com.mewna.catnip.entity.Entity;
 import com.mewna.catnip.entity.guild.UnavailableGuild;
+import com.mewna.catnip.entity.impl.ReadyImpl;
 import com.mewna.catnip.entity.user.User;
+import io.vertx.core.json.JsonObject;
 
 import javax.annotation.Nonnegative;
 import javax.annotation.Nonnull;
@@ -42,6 +46,7 @@ import java.util.Set;
  * @author amy
  * @since 10/4/18.
  */
+@JsonDeserialize(as = ReadyImpl.class)
 public interface Ready extends Entity {
     /**
      * @return The websocket gateway version.
@@ -67,4 +72,8 @@ public interface Ready extends Entity {
      */
     @Nonnull
     Set<UnavailableGuild> guilds();
+    
+    static Ready fromJson(final Catnip catnip, final JsonObject json) {
+        return Entity.fromJson(catnip, Ready.class, json);
+    }
 }

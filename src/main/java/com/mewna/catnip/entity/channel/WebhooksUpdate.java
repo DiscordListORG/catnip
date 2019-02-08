@@ -28,8 +28,11 @@
 package com.mewna.catnip.entity.channel;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.mewna.catnip.Catnip;
+import com.mewna.catnip.entity.Entity;
 import com.mewna.catnip.entity.guild.GuildEntity;
 import com.mewna.catnip.entity.impl.WebhooksUpdateImpl;
+import io.vertx.core.json.JsonObject;
 
 import javax.annotation.CheckReturnValue;
 
@@ -58,4 +61,8 @@ public interface WebhooksUpdate extends GuildEntity {
      */
     @CheckReturnValue
     long channelIdAsLong();
+    
+    static WebhooksUpdate fromJson(final Catnip catnip, final JsonObject json) {
+        return Entity.fromJson(catnip, WebhooksUpdate.class, json);
+    }
 }

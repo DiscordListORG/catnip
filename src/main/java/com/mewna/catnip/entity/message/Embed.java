@@ -28,8 +28,11 @@
 package com.mewna.catnip.entity.message;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.mewna.catnip.Catnip;
+import com.mewna.catnip.entity.Entity;
 import com.mewna.catnip.entity.impl.EmbedImpl;
 import com.mewna.catnip.entity.impl.EmbedImpl.*;
+import io.vertx.core.json.JsonObject;
 import lombok.Getter;
 
 import javax.annotation.CheckReturnValue;
@@ -163,6 +166,10 @@ public interface Embed {
     @Nonnull
     @CheckReturnValue
     List<Field> fields();
+    
+    static Embed fromJson(final Catnip catnip, final JsonObject json) {
+        return Entity.fromJson(catnip, Embed.class, json);
+    }
     
     enum EmbedType {
         IMAGE("image"),

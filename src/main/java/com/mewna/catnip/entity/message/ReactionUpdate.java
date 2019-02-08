@@ -28,9 +28,11 @@
 package com.mewna.catnip.entity.message;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.mewna.catnip.Catnip;
 import com.mewna.catnip.entity.Entity;
 import com.mewna.catnip.entity.impl.ReactionUpdateImpl;
 import com.mewna.catnip.entity.misc.Emoji;
+import io.vertx.core.json.JsonObject;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -72,4 +74,8 @@ public interface ReactionUpdate extends Entity {
      */
     @Nonnull
     Emoji emoji();
+    
+    static ReactionUpdate fromJson(final Catnip catnip, final JsonObject json) {
+        return Entity.fromJson(catnip, ReactionUpdate.class, json);
+    }
 }

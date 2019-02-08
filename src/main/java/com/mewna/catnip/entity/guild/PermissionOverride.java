@@ -28,9 +28,12 @@
 package com.mewna.catnip.entity.guild;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.mewna.catnip.Catnip;
+import com.mewna.catnip.entity.Entity;
 import com.mewna.catnip.entity.Snowflake;
 import com.mewna.catnip.entity.impl.PermissionOverrideImpl;
 import com.mewna.catnip.entity.util.Permission;
+import io.vertx.core.json.JsonObject;
 import lombok.Getter;
 
 import javax.annotation.CheckReturnValue;
@@ -63,6 +66,10 @@ public interface PermissionOverride extends Snowflake {
     @CheckReturnValue
     default Set<Permission> deny() {
         return Permission.toSet(denyRaw());
+    }
+    
+    static PermissionOverride fromJson(final Catnip catnip, final JsonObject json) {
+        return Entity.fromJson(catnip, PermissionOverride.class, json);
     }
     
     enum OverrideType {
