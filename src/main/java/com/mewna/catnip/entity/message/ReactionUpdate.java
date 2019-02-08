@@ -80,7 +80,7 @@ public interface ReactionUpdate extends Entity {
     @Nonnull
     @Override
     default JsonObject toJson() {
-        return Entity.super.toJson().put("emoji", emoji().toJson());
+        return Entity.super.toJson().getJsonObject("d").put("emoji", emoji().toJson());
     }
     
     static ReactionUpdate fromJson(final Catnip catnip, final JsonObject json) {

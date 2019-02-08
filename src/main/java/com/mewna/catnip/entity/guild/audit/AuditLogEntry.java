@@ -27,6 +27,7 @@
 
 package com.mewna.catnip.entity.guild.audit;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mewna.catnip.Catnip;
 import com.mewna.catnip.entity.Entity;
@@ -80,7 +81,14 @@ public interface AuditLogEntry extends Snowflake {
     
     @Nonnull
     @CheckReturnValue
+    @JsonIgnore
     List<AuditLogChange> changes();
+    
+    @Nonnull
+    @Override
+    default JsonObject toJson() {
+        return Snowflake.super.toJson().getJsonObject("d").put("changes", changes());
+    }
     
     static AuditLogEntry fromJson(final Catnip catnip, final JsonObject json) {
         return AuditLogEntryImpl
