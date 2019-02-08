@@ -27,7 +27,9 @@
 
 package com.mewna.catnip.entity.guild.audit;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.mewna.catnip.entity.guild.PermissionOverride.OverrideType;
+import com.mewna.catnip.entity.impl.OverrideUpdateInfoImpl;
 
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
@@ -38,7 +40,11 @@ import javax.annotation.Nullable;
  * @since 10/07/18
  */
 @SuppressWarnings("unused")
+@JsonDeserialize(as = OverrideUpdateInfoImpl.class)
 public interface OverrideUpdateInfo extends OptionalEntryInfo {
+    
+    String IDENTIFIER = "override_update_info";
+    
     @Nonnull
     @CheckReturnValue
     default String overriddenEntityId() {
@@ -55,4 +61,9 @@ public interface OverrideUpdateInfo extends OptionalEntryInfo {
     @Nullable
     @CheckReturnValue
     String roleName();
+    
+    @Override
+    default String infoType() {
+        return IDENTIFIER;
+    }
 }

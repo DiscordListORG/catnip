@@ -27,12 +27,40 @@
 
 package com.mewna.catnip.entity.guild.audit;
 
+import com.mewna.catnip.Catnip;
 import com.mewna.catnip.entity.Entity;
+import io.vertx.core.json.JsonObject;
+
+import javax.annotation.Nonnull;
 
 /**
  * @author SamOphis
  * @since 10/07/18
  */
-@SuppressWarnings({"WeakerAccess", "InterfaceMayBeAnnotatedFunctional"})
+@SuppressWarnings("WeakerAccess")
 public interface OptionalEntryInfo extends Entity {
+    
+    String infoType();
+    
+    @Nonnull
+    @Override
+    default JsonObject toJson() {
+        return Entity.super.toJson().put("type", infoType());
+    }
+    
+    static OptionalEntryInfo fromJson(final Catnip catnip, final JsonObject json) {
+        final String type = json.getString("type");
+        json.remove("type");
+        switch(type) {
+            case OverrideUpdateInfo.IDENTIFIER:
+                return  Entity.fromJson(catnip, OverrideUpdateInfo.class, json);
+            case MemberPruneInfo.IDENTIFIER:
+                return Entity.fromJson(catnip, MemberPruneInfo.class, json);
+            case MessageDeleteInfo.IDENTIFIER:
+                return Entity.fromJson(catnip, MessageDeleteInfo.class, json);
+            default:
+                throw new IllegalArgumentException("This json does not contain a valid OptionalEntryInfo");
+        }
+    }
+    
 }

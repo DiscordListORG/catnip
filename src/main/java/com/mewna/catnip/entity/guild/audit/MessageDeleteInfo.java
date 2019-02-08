@@ -27,6 +27,9 @@
 
 package com.mewna.catnip.entity.guild.audit;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.mewna.catnip.entity.impl.MessageDeleteInfoImpl;
+
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 
@@ -35,7 +38,11 @@ import javax.annotation.Nonnull;
  * @since 10/07/18
  */
 @SuppressWarnings("unused")
+@JsonDeserialize(as = MessageDeleteInfoImpl.class)
 public interface MessageDeleteInfo extends OptionalEntryInfo {
+    
+    String IDENTIFIER = "message_delete_info";
+    
     @Nonnull
     @CheckReturnValue
     default String channelId() {
@@ -47,4 +54,9 @@ public interface MessageDeleteInfo extends OptionalEntryInfo {
     
     @CheckReturnValue
     int deletedMessagesCount();
+    
+    @Override
+    default String infoType() {
+        return IDENTIFIER;
+    }
 }

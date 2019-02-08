@@ -27,6 +27,9 @@
 
 package com.mewna.catnip.entity.guild.audit;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.mewna.catnip.entity.impl.MemberPruneInfoImpl;
+
 import javax.annotation.CheckReturnValue;
 
 /**
@@ -34,10 +37,19 @@ import javax.annotation.CheckReturnValue;
  * @since 10/07/18
  */
 @SuppressWarnings("unused")
+@JsonDeserialize(as = MemberPruneInfoImpl.class)
 public interface MemberPruneInfo extends OptionalEntryInfo {
+    
+    String IDENTIFIER = "member_prune_info";
+    
     @CheckReturnValue
     int deleteMemberDays();
     
     @CheckReturnValue
     int removedMembersCount();
+    
+    @Override
+    default String infoType() {
+        return IDENTIFIER;
+    }
 }
